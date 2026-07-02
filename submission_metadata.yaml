@@ -1,0 +1,84 @@
+
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "DataBaes"  # Used in leaderboard and announcements
+
+primary_contact:
+  name: "Samhitha Veerendra Kumar"
+  email: "hitha240605@gmail.com"   # Used for all organizer communication
+  phone: "+91-6361106264        # Used for top-50 / top-10 outreach
+
+team_members:
+  - name: "Samhitha Veerendra Kumar"
+    email: "hitha240605@gmail.com"
+    role: "ML Engineer","Team Lead"
+  - name: "Vaishnavi B S "
+    email: "vaishnavibs.240@gmail.com"
+    role: "Data Engineer"
+ 
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/Vaishnavib-s/RankForge"
+
+sandbox_link: "https://colab.research.google.com/drive/1xU7866dp1prRhuJPyXWkFk3mZlgTkbtB?usp=sharing"
+
+
+reproduce_command: "python rank.py --candidates ./candidates.jsonl --out ./submission.csv"
+
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "MacBook Pro M2"                    # Or: "AWS EC2 c5.4xlarge", "Local Linux box", etc.
+  cpu_cores: 8                                  # Number of CPU cores used
+  ram_gb: 16                                    # Available RAM in GB
+  python_version: "3.11.4"                      # python --version
+  os: "macOS 14.2"                              # Or "Ubuntu 22.04 LTS", etc.
+  uses_gpu_for_inference: false                 # Must be false — see compute constraints
+  has_network_during_ranking: false             # Must be false — no API calls during ranking
+  pre_computation_required: false               # true if you pre-compute embeddings or train models offline
+  pre_computation_time_minutes: 0               # Approximate, if applicable
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+
+ai_tools_used:
+  - "Claude"        # e.g. for architecture discussion, code review
+  - "Gemini Pro" # e.g. for autocomplete
+
+ai_usage_summary: |
+  - "Used Claude for code review and architectural discussion. Used Gemini Pro for autocomplete.
+     No candidate data was fed to any LLM."
+  - "Used Gemini Pro to debug Python issues."
+
+# ============================================================================
+# Approach summary (optional but recommended)
+# ============================================================================
+methodology_summary: |
+ ""Our solution is a multi-stage hybrid ranking pipeline designed strictly for the <5-minute
+ CPU constraint, utilizing zero external APIs or LLMs. We begin with a streaming filter to 
+ instantly drop honeypots and disqualified profiles. Next, a query-scoped BM25 algorithm 
+ retrieves the top 2,000 relevant candidates. For these, we engineer 8 core features—including a 
+ mathematical 'Trust Multiplier' that heavily discounts unendorsed, zero-duration skills. We then 
+ use these baseline features as pseudo-labels to dynamically train a LightGBM (LambdaRank) model on the fly, 
+ optimizing for non-linear candidate fit. To ensure real-world hiring availability, the ML score is multiplicatively 
+ gated by a behavioral modifier, severely penalizing candidates with low platform activity or response rates. 
+ Ties are broken deterministically via candidate ID. Finally, we generate the reasoning strings using a mathematically 
+ seeded structural branching engine. This guarantees highly varied, grammatically sound, and 100% hallucination-free 
+ explanations using only verified JSON facts.""
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true        # I have read submission_spec.md in full
+  code_is_original_work: true       # My code is my team's original work (using AI as a tool is fine)
+  no_collusion: true                # I have not coordinated my submission with other teams
+  honeypot_check_done: false        # OPTIONAL — set true if you explicitly checked for honeypots in your ranking
+  reproduction_tested: true         # I have tested that my reproduce_command runs end-to-end
